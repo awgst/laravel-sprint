@@ -4,7 +4,7 @@ if (! function_exists('apps')) {
     function apps()
     {
         $modules = [];
-        $directory = './Modules';
+        $directory = './'.config('sprint.path');
 
         if (is_dir($directory)) {
             $folders = opendir($directory);
@@ -20,11 +20,18 @@ if (! function_exists('apps')) {
     }
 }
 
-if (! function_exists('panic')) {
-    function panic($e)
+if (! function_exists('sprint_error')) {
+    function sprint_error($e)
     {
         $message = is_string($e) ? $e : $e->getMessage();
         $GLOBALS['SPRINT_ERRORS'] = $message;
         return false;
+    }
+}
+
+if (! function_exists('sprint_path')) {
+    function sprint_path($name, $filePath)
+    {
+        return config('sprint.path')."{$name}/{$filePath}";
     }
 }

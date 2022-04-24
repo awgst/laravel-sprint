@@ -50,7 +50,7 @@ class Installer
             shell_exec($command);
             shell_exec("chmod -R 777 ./$path");
         } catch (Exception $e) {
-            return panic($e);
+            return sprint_error($e);
         }
 
         return true;

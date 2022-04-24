@@ -1,0 +1,51 @@
+<?php
+
+namespace %NAMESPACE%;
+
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Factory;
+
+class %CLASS% extends ServiceProvider
+{
+    /**
+     * @var string $sprintName
+     */
+    protected $sprintName = '%NAME%';
+
+    /**
+     * @var string $sprintNameLower
+     */
+    protected $sprintNameLower = '%NAME_LOWER%';
+
+    /**
+     * Boot the application events.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->registerConfig();
+    }
+
+    /**
+     * Register config.
+     *
+     * @return void
+     */
+    protected function registerConfig()
+    {
+        $this->mergeConfigFrom(
+            sprint_path($this->sprintName, 'Config/config.php'), $this->sprintNameLower
+        );
+    }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->register(RouteServiceProvider::class);
+    }
+}
