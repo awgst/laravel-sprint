@@ -3,6 +3,7 @@
 namespace Awgst\Sprint\Generators;
 
 use Awgst\Sprint\Contracts\Generator\GenerateEntities;
+use Awgst\Sprint\Generators\Files\Entities;
 use Awgst\Sprint\Installers\Installer;
 use Awgst\Sprint\Modules\Module;
 use Awgst\Sprint\Support\Stuff;
@@ -21,13 +22,16 @@ class ModuleGenerator extends Generator implements GenerateEntities
      */
     public function generate()
     {
+        $success = false;
         $module = $this->module;
         // Generate Folder
-        $this->generateFolder($module);
+        $success = $this->generateFolder($module);
         // Generate File
-        $this->generateFile($module);
+        if ($success) {
+            $success = $this->generateFile($module);
+        }
 
-        return true;
+        return $success;
     }
 
     /**
@@ -38,6 +42,8 @@ class ModuleGenerator extends Generator implements GenerateEntities
     {
         $path = $module->getPath();
         $install = (new Installer())->run($path);
+
+        return $install;
     }
 
     /**
@@ -46,21 +52,11 @@ class ModuleGenerator extends Generator implements GenerateEntities
      */
     private function generateFile(Module $module)
     {
+        $success = false;
         if ($this instanceof GenerateEntities) {
-            $this->generateEntities($module);
+            $success = (new Entities($module))->generate();
         }
-    }
 
-    /**
-     * Generate Entities
-     * @param Module $module
-     */
-    public function generateEntities(Module $module)
-    {
-        $content = (new Stuff('model/model.stuff', [
-            'NAMESPACE' => $module->namespace['entities'],
-            'CLASS' => $module->getName()
-        ]))->render();
-        (new FileGenerator($module->getPath()."/Entities/{$module->getName()}.php", $content))->generate();
+        return $success;
     }
 }

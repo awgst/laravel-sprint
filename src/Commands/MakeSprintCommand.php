@@ -49,6 +49,8 @@ class MakeSprintCommand extends Command
 
         if ($success) {
             $this->info("Successfully initialize {$name}");
+        } else {
+            $this->error($GLOBALS['SPRINT_ERRORS']);
         }
 
         return $success;

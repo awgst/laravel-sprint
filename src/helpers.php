@@ -23,6 +23,8 @@ if (! function_exists('apps')) {
 if (! function_exists('panic')) {
     function panic($e)
     {
-        echo $e->getMessage();
+        $message = is_string($e) ? $e : $e->getMessage();
+        $GLOBALS['SPRINT_ERRORS'] = $message;
+        return false;
     }
 }

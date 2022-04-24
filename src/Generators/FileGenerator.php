@@ -34,7 +34,9 @@ class FileGenerator extends Generator
 
             file_put_contents($this->path, $this->content);
         } catch (FileAlreadyExistsException $e) {
-            panic($e);
+            return panic($e);
         }
+
+        return true;
     }
 }

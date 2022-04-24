@@ -6,5 +6,4 @@ use Awgst\Sprint\Modules\Module;
 
 interface GenerateEntities
 {
-    public function generateEntities(Module $module);
 }
