@@ -5,13 +5,19 @@ namespace Awgst\Sprint\Generators;
 use Awgst\Sprint\Contracts\Generator\GenerateController;
 use Awgst\Sprint\Contracts\Generator\GenerateEntities;
 use Awgst\Sprint\Contracts\Generator\GenerateProvider;
+use Awgst\Sprint\Contracts\Generator\GenerateRoute;
 use Awgst\Sprint\Generators\Files\Controller;
 use Awgst\Sprint\Generators\Files\Entities;
 use Awgst\Sprint\Generators\Files\Provider;
+use Awgst\Sprint\Generators\Files\Route;
 use Awgst\Sprint\Installers\Installer;
 use Awgst\Sprint\Modules\Module;
 
-class ModuleGenerator extends Generator implements GenerateEntities, GenerateController, GenerateProvider
+class ModuleGenerator extends Generator implements 
+GenerateEntities, 
+GenerateController, 
+GenerateProvider,
+GenerateRoute
 {
     private $module;
 
@@ -70,6 +76,13 @@ class ModuleGenerator extends Generator implements GenerateEntities, GenerateCon
             $success = (new Provider($module))->setStuff('provider/routeserviceprovider.stuff')
                                             ->setClassName('Route')
                                             ->generate();
+        }
+
+        if ($this instanceof GenerateRoute) {
+            $success = (new Route($module))->setStuff('route/web.stuff')
+                                        ->generate();
+            $success = (new Route($module))->setStuff('route/api.stuff')
+                                        ->generate();
         }
 
         return $success;
