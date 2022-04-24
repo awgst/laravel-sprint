@@ -12,7 +12,6 @@ class Module
     {
         $this->name = $name;
         $this->path = config('sprint.path').$name;
-        $this->namespace['entities'] = $this->getDefaultEntitiesNamespace();
     }
 
     /**
@@ -45,18 +44,5 @@ class Module
     public function getPath() : string
     {
         return $this->path;
-    }
-
-    /**
-     * Get Entities default namespace
-     */
-    private function getDefaultEntitiesNamespace() : string
-    {
-        $path = $this->getPath();
-        $path .= '\\Entities';
-
-        $path = str_replace('/', '\\', $path);
-
-        return rtrim($path, '\\');
     }
 }

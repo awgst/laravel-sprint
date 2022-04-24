@@ -7,10 +7,11 @@ use Awgst\Sprint\Generators\Generator;
 use Awgst\Sprint\Modules\Module;
 use Awgst\Sprint\Support\Stuff;
 
-class Entities extends Generator
+class Controller extends Generator
 {
     private $module;
     private $namespace;
+    private $path = "Http/Controllers";
 
     public function __construct(Module $module)
     {
@@ -19,24 +20,33 @@ class Entities extends Generator
     }
 
     /**
+     * Set Path
+     */
+    public function setPath(string $path)
+    {
+        $this->path = $path;
+    }
+
+    /**
      * Generate
      */
     public function generate()
     {
-        return $this->generateEntities($this->module);
+        return $this->generateController($this->module);
     }
 
     /**
-     * Generate Entities
+     * Generate Controller
      * @param Module $module
      */
-    private function generateEntities(Module $module)
+    private function generateController(Module $module)
     {
-        $content = (new Stuff('model/model.stuff', [
+        $className = $this->className().'Controller';
+        $content = (new Stuff('controller/controller.stuff', [
             'NAMESPACE' => $this->namespace,
-            'CLASS' => $this->className()
+            'CLASS' => $className
         ]))->render();
-        return (new FileGenerator($module->getPath()."/Entities/{$module->getName()}.php", $content))->generate();
+        return (new FileGenerator($module->getPath()."/{$this->path}/{$className}.php", $content))->generate();
     }
 
     /**
@@ -45,7 +55,7 @@ class Entities extends Generator
     private function getDefaultNamespace() : string
     {
         $path = $this->module->getPath();
-        $path .= '\\Entities';
+        $path .= '\\'.$this->path;
 
         $path = str_replace('/', '\\', $path);
 
