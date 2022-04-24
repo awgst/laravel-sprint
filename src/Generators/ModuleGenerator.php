@@ -26,6 +26,8 @@ class ModuleGenerator extends Generator implements GenerateEntities
         $this->generateFolder($module);
         // Generate File
         $this->generateFile($module);
+
+        return true;
     }
 
     /**

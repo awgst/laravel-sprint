@@ -8,10 +8,10 @@ class Module
     private $path;
     public $namespace = [];
 
-    public function __construct(string $name, string $path='Modules/')
+    public function __construct(string $name)
     {
         $this->name = $name;
-        $this->path = $path.$name;
+        $this->path = config('sprint.path').$name;
         $this->namespace['entities'] = $this->getDefaultEntitiesNamespace();
     }
 
