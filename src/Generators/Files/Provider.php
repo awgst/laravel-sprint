@@ -44,7 +44,7 @@ class Provider extends Generator
      */
     private function generateProvider(Module $module)
     {
-        $className = $this->className().'ServiceProvider';
+        $className = $this->getClassName();
         $content = (new Stuff($this->stuff, [
             'NAMESPACE' => $this->namespace,
             'CLASS' => $className,
@@ -106,5 +106,21 @@ class Provider extends Generator
     {
         $this->stuff = $stuff;
         return $this;
+    }
+
+    /**
+     * Get provider namespace
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * Get Provider class name
+     */
+    public function getClassName()
+    {
+        return $this->className().'ServiceProvider';
     }
 }

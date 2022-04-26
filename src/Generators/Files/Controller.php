@@ -12,11 +12,13 @@ class Controller extends Generator
     private $module;
     private $namespace;
     private $path = "Http/Controllers";
+    private $className;
 
     public function __construct(Module $module)
     {
         $this->module = $module;
         $this->namespace = $this->getDefaultNamespace();
+        $this->className = $this->module->getName();
     }
 
     /**
@@ -41,7 +43,7 @@ class Controller extends Generator
      */
     private function generateController(Module $module)
     {
-        $className = $this->className().'Controller';
+        $className = $this->getClassName();
         $content = (new Stuff('controller/controller.stuff', [
             'NAMESPACE' => $this->namespace,
             'CLASS' => $className
@@ -63,10 +65,45 @@ class Controller extends Generator
     }
 
     /**
-     * Get Entities default class name
+     * Get Provider default class name
      */
     private function className()
     {
-        return $this->module->getName();
+        return $this->className;
+    }
+
+    /**
+     * Set Provider class name
+     * @param string $name
+     */
+    public function setClassName(string $name)
+    {
+        $this->className = $name;
+        return $this;
+    }
+
+    /**
+     * Set Provider stuff
+     */
+    public function setStuff(string $stuff)
+    {
+        $this->stuff = $stuff;
+        return $this;
+    }
+
+    /**
+     * Get provider namespace
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * Get Provider class name
+     */
+    public function getClassName()
+    {
+        return $this->className().'Controller';
     }
 }

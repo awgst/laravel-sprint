@@ -1,7 +1,7 @@
 <?php
 
-if (! function_exists('apps')) {
-    function apps()
+if (! function_exists('sprint_apps')) {
+    function sprint_apps()
     {
         $modules = [];
         $directory = './'.config('sprint.path');

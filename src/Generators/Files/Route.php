@@ -13,6 +13,7 @@ class Route extends Generator
     private $path = "Routes";
     private $className;
     private $stuff;
+    private $controller = null;
 
     public function __construct(Module $module)
     {
@@ -44,7 +45,8 @@ class Route extends Generator
     {
         $content = (new Stuff($this->stuff, [
             'NAME_LOWER' => strtolower($module->getName()),
-            'CONTROLLER' => $module->getName().'Controller'
+            'CONTROLLER' => $module->getName().'Controller',
+            'CONTROLLER_NAMESPACE' => $this->controller ? $this->controller['namespace'] : str_replace('/', '\\', sprint_path($module->getName(), 'Http/Controllers/'.$module->getName().'Controller'))
         ]))->render();
 
         if ($this->stuff == 'route/web.stuff') {
@@ -59,16 +61,13 @@ class Route extends Generator
     }
 
     /**
-     * Get sprint namespace
+     * Set controller
      * @param Module $module
      */
-    private function getSprintNamespace(Module $module)
+    public function setController(array $controller)
     {
-        $namespace = sprint_path($module->getName(), 'Http/Controller');
-
-        $namespace = str_replace('/', '\\', $namespace);
-
-        return rtrim($namespace, '\\');
+        $this->controller = $controller;
+        return $this;
     }
 
     /**

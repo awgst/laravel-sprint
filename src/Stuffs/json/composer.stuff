@@ -1,0 +1,25 @@
+{
+    "name": "awgst/%SPRINT_LOWER%",
+    "description": "",
+    "authors": [
+        {
+            "name": "Awang Trisakti",
+            "email": "trisaktiawang@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "%PROVIDER_PATH%"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "%SPRINT_PATH%": ""
+        }
+    }
+}

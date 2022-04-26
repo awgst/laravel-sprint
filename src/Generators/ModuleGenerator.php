@@ -12,6 +12,7 @@ use Awgst\Sprint\Generators\Files\Provider;
 use Awgst\Sprint\Generators\Files\Route;
 use Awgst\Sprint\Installers\Installer;
 use Awgst\Sprint\Modules\Module;
+use Awgst\Sprint\Support\Stuff;
 
 class ModuleGenerator extends Generator implements 
 GenerateEntities, 
@@ -67,10 +68,13 @@ GenerateRoute
         }
 
         if ($this instanceof GenerateController) {
+            $controller['namespace'] = (new Controller($module))->getNamespace().'\\'.(new Controller($module))->getClassName();
             $success = (new Controller($module))->generate();
         }
 
         if ($this instanceof GenerateProvider) {
+            $providerObject= (new Provider($module));
+            $provider['namespace'] = $providerObject->getNamespace().'\\'.$providerObject->getClassName();
             $success = (new Provider($module))->setStuff('provider/appserviceprovider.stuff')
                                             ->generate();
             $success = (new Provider($module))->setStuff('provider/routeserviceprovider.stuff')
@@ -79,10 +83,40 @@ GenerateRoute
         }
 
         if ($this instanceof GenerateRoute) {
-            $success = (new Route($module))->setStuff('route/web.stuff')
+            $success = (new Route($module))->setController($controller)
+                                        ->setStuff('route/web.stuff')
                                         ->generate();
             $success = (new Route($module))->setStuff('route/api.stuff')
                                         ->generate();
+        }
+
+        $success = $this->generateJsonFile($module, $provider);
+
+
+
+        return $success;
+    }
+
+    /**
+     * Generate json file
+     * @param Module $module
+     */
+    private function generateJsonFile(Module $module, array $provider)
+    {
+        $success = false;
+        foreach ([
+            'composer'=>'json/composer.stuff', 
+            'module'=>'json/module.stuff', 
+            'package'=>'json/package.stuff'
+        ] as $file => $stuff) {
+            $content = (new Stuff($stuff, [
+                'SPRINT_PATH' => str_replace('/', '\\\\', sprint_path($module->getName(), '')),
+                'SPRINT' => $module->getName(),
+                'SPRINT_LOWER' => strtolower($module->getName()),
+                'PROVIDER_PATH' => str_replace('\\', '\\\\', $provider['namespace'])
+            ]))->render();
+    
+            $success =  (new FileGenerator($module->getPath()."/{$file}.json", $content))->generate();
         }
 
         return $success;

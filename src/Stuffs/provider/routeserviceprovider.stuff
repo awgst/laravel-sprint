@@ -8,13 +8,6 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 class %CLASS% extends ServiceProvider
 {
     /**
-     * The module namespace to assume when generating URLs to actions.
-     *
-     * @var string
-     */
-    protected $namespace = '%SPRINT_NAMESPACE%';
-
-    /**
      * Called before routes are registered.
      *
      * Register any model bindings or pattern based filters.
